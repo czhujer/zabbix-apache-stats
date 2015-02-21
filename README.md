@@ -6,7 +6,7 @@ Overview
 This program gathers data from Apache's built-in status page and 
 sends it to Zabbix. The data is sent via the CLI tool zabbix_sender.
 
-** See http://www.zabbix.com/wiki/templates/apache for a detailed install guide **
+**See http://www.zabbix.com/wiki/templates/apache for a detailed install guide**
 
 Author(s)
 --------
@@ -44,18 +44,23 @@ Zabbix Agent Mode Install
 This method relies on your polling interval for an item called *apache.status*, and will honor any maintenance windows.
 The check will run on the host being monitored everytime time *apache.status* is polled. This item is defined as a UserParameter like this:
 
-    ```
-    # returns a single integer, but uses zabbix_sender to populate trapper items
-    UserParameter=apache.status,/var/lib/zabbix/bin/check_apache --config /etc/zabbix_agentd.conf
-    ```
+  ```
+  # returns a single integer, but uses zabbix_sender to populate trapper items
+  UserParameter=apache.status,/var/lib/zabbix/bin/check_apache --config /etc/zabbix_agentd.conf
+  ```
 
 Install on apache server to be monitored and connect to status page on localhost. Assumes zabbix-agent is installed.
 
- 1. Copy [bin/check_apache](check_apache) to some location, such as `/var/lib/zabbix/bin/check_apache`.
- 1. Run chmod +x on the file
- 1. Copy [conf/check_apache.conf](check_apache.conf) to your zabbix agent include dir. Probably */etc/zabbix_agentd.conf.d/*
+ 1. Copy [bin/check_apache](bin/check_apache) to some location, such as `/var/lib/zabbix/bin/check_apache`.
+ 1. Run `chmod +x` on the file
+ 1. Copy [conf/check_apache.conf](conf/check_apache.conf) to your zabbix agent include dir. Probably `/etc/zabbix_agentd.conf.d/`.
+
  - **Tip** Check to make sure your include directory is enabled.
- > grep Include /etc/zabbix_agentd.conf
+
+  ```
+  grep Include /etc/zabbix_agentd.conf
+  ```
+
  1. **Tip** Make sure you have `ServerActive` and `Hostname` filled in your config file.
  1. Restart zabbix-agent.
 
@@ -65,12 +70,14 @@ This method can run remotely or locally via cron. This method relies on your cro
 
 Install on Zabbix server or the host to monitor:
 
- 1. Copy [bin/check_apache](check_apache) to some location, such as `/usr/bin/check_apache`.
+ 1. Copy [bin/check_apache](bin/check_apache) to some location, such as `/usr/bin/check_apache`.
  1. Run `chmod +x` on the file
  1. Add this to crontab to run every minute:
+
     ```
     * * * * * /usr/bin/check_apache --zabbixsource myhostname -z myzabbixserver &> /dev/null
     ```
+
  1. Replace *myhostname* with the hostname (or *name* in the Zabbix GUI)
 of the host that the values should be stored with. Replace *myzqbbixserver*
 with the hostname/IP of your Zabbix server.
