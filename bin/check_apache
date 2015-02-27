@@ -79,8 +79,6 @@ def zabbix_sender(payload, agentconfig = None, zabbixserver = None, zabbixport =
     sender_command = []
     result = 0
     err = ''
-    out= ""
-    ret = 0
 
     # must have a config file OR have hostname, and server name
     if agentconfig is not None:
@@ -101,6 +99,8 @@ def zabbix_sender(payload, agentconfig = None, zabbixserver = None, zabbixport =
 
     except Exception, e:
       err = "%s\nFailed to execute: '%s'" % (e, " ".join(sender_command))
+      out= ""
+      ret = 1
 
     finally:
         if ret != 0:
