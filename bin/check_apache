@@ -54,7 +54,7 @@ def zbx_fail(err):
     print "ZBX_NOTSUPPORTED"
     sys.exit(1)
 
-def fetchURL(url, user = None, passwd = None):
+def fetchURL(url, user = None, passwd = None, proto = ""):
     """ Return the data from a URL """
     if user and passwd:
         parts = url.split('://')
