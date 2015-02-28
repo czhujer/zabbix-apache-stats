@@ -61,16 +61,17 @@ def fetchURL(url, user = None, passwd = None):
         url = parts[0] + "://" + user + ":" + passwd + "@" + parts[1]
 
     try:
-        #conn = urllib.urlopen(url)
-        #data = conn.read()
-        r = requests
-        r = r.get(url, verify=False)
-        data = r.text
+	if proto != "http":
+            r = requests
+    	    r = r.get(url, verify=False)
+    	    data = r.text
+	    r.connection.close()
+	else:
+	    conn = urllib.urlopen(url)
+    	    data = conn.read()
+	    conn.close()
     except:
         raise
-
-    #conn.close()
-    r.connection.close()
      
     return data
 
@@ -287,7 +288,7 @@ def main():
     result = 0
 
     try:
-        server_status = fetchURL(opts.url, user = opts.user, passwd = opts.passwd)
+        server_status = fetchURL(opts.url, user = opts.user, passwd = opts.passwd, proto = opts.proto)
     except Exception as e:
         zbx_fail('failed to read server-status: %s' % e)
     
